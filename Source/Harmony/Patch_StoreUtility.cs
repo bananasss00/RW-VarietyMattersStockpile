@@ -71,7 +71,7 @@ namespace VarietyMattersStockpile
         {
             if (t.stackCount > StorageLimits.CalculateSizeLimit(t))
             {
-                currentPriority = StoragePriority.Low ;
+                currentPriority = StoragePriority.Low; // StoragePriority.Unstored?
             }
         }
 

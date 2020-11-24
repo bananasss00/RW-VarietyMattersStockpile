@@ -3,10 +3,29 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using HarmonyLib;
+using UnityEngine;
 
 
 namespace VarietyMattersStockpile
 {
+    [HarmonyPatch(typeof(MassUtility), "CountToPickUpUntilOverEncumbered")]
+    internal class MassUtilityPatch
+    {
+        private static void Postfix(Pawn pawn, Thing thing, ref int __result)
+        {
+            int curSizeLimit = StorageLimits.CalculateSizeLimit(thing);
+            if (thing.stackCount > curSizeLimit)
+            {
+                int t = thing.stackCount - curSizeLimit;
+                if (t < 0)
+                {
+                    t = 0;
+                }
+                __result = Mathf.Min(t, __result);
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(HaulAIUtility), "HaulToCellStorageJob")]
     public static class Patch_Haul
     {
